@@ -1,11 +1,19 @@
 import requests
 import pandas as pd
+from urllib.parse import urlencode
 
 def fetch_weather_data(date, location):
-    # Replace with actual API endpoint and parameters
-    api_url = f"https://api.open-meteo.com/v1/forecast?latitude={location['lat']}&longitude={location['lon']}&hourly=temperature_2m,precipitation_sum,wind_speed_10m"
-    
-    response = requests.get(api_url)
+    api_url = "https://api.open-meteo.com/v1/forecast"
+    params = {
+        "latitude": 46.991,
+        "longitude": 6.9293,
+        "hourly": "temperature_2m,wind_speed_10m,precipitation",
+        "timezone": "Europe/Zurich"
+    }
+
+    response = requests.get(api_url, params=params)
+    print(response.json())
+
     if response.status_code == 200:
         weather_data = response.json()
         return weather_data
@@ -26,8 +34,8 @@ def process_weather_data(weather_data):
 
 def main():
     # Example usage
-    date = "2023-10-01"
-    location = {'lat': 40.7128, 'lon': -74.0060}  # Example coordinates for New York City
+    date = "2025-01-01"
+    location = {'lat': 46.9910, 'lon': 6.9293}
     weather_data = fetch_weather_data(date, location)
     processed_data = process_weather_data(weather_data)
     print(processed_data)
