@@ -4,14 +4,14 @@ from urllib.parse import urlencode
 import os
 
 def fetch_weather_data(date, location):
-    api_url = "https://api.open-meteo.com/v1/forecast"
+    api_url = "https://historical-forecast-api.open-meteo.com/v1/forecast"
     params = {
         "latitude": location['lat'],
         "longitude": location['lon'],
-        "hourly": "temperature_2m,wind_speed_10m,precipitation",
-        "timezone": "Europe/Zurich",
         "start_date": date,
-        "end_date": date
+        "end_date": date,
+        "timezone": "Europe/Zurich",
+        "hourly": "temperature_2m,wind_speed_10m,precipitation",
     }
 
     # Log the full API URL with parameters
@@ -49,7 +49,7 @@ def process_weather_data(weather_data, target_hour=None):
 
 def main():
     # Example usage
-    date = "2025-07-01"
+    date = "2025-01-01"
     location = {'lat': 46.9910, 'lon': 6.9293}
     target_hour = "14:00"  # Set your desired hour here
     weather_data = fetch_weather_data(date, location)
