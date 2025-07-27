@@ -1,6 +1,7 @@
 import requests
 import pandas as pd
 from urllib.parse import urlencode
+import os
 
 def fetch_weather_data(date, location):
     api_url = "https://api.open-meteo.com/v1/forecast"
@@ -42,7 +43,15 @@ def main():
     location = {'lat': 46.9910, 'lon': 6.9293}
     weather_data = fetch_weather_data(date, location)
     processed_data = process_weather_data(weather_data)
-    print(processed_data)
+
+    # Add date and location columns
+    processed_data['date'] = date
+    processed_data['location'] = f"{location['lat']},{location['lon']}"
+
+    # Save to CSV
+    os.makedirs('data/processed', exist_ok=True)
+    processed_data.to_csv('data/processed/weather_data.csv', index=False)
+    print("Saved weather data to data/processed/weather_data.csv")
 
 if __name__ == "__main__":
     main()
