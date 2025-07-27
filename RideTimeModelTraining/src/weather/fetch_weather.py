@@ -11,6 +11,10 @@ def fetch_weather_data(date, location):
         "timezone": "Europe/Zurich"
     }
 
+    # Log the full API URL with parameters
+    full_url = f"{api_url}?{urlencode(params)}"
+    print(f"Requesting weather data from: {full_url}")
+
     response = requests.get(api_url, params=params)
     print(response.json())
 
@@ -24,8 +28,8 @@ def process_weather_data(weather_data):
     # Extract relevant weather information
     temperature = weather_data['hourly']['temperature_2m']
     wind_speed = weather_data['hourly']['wind_speed_10m']
-    rain = [precip > 0 for precips in weather_data['hourly']['precipitation_sum']]
-    
+    rain = [precip > 0 for precip in weather_data['hourly']['precipitation']]
+
     return pd.DataFrame({
         'temperature': temperature,
         'wind_speed': wind_speed,
