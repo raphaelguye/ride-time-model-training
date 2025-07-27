@@ -34,18 +34,15 @@ def process_weather_data(weather_data, target_hour=None):
     rain = [precip > 0 for precip in weather_data['hourly']['precipitation']]
     time = weather_data['hourly']['time']
 
-    df = pd.DataFrame({
-        'time': time,
-        'temperature': temperature,
-        'wind_speed': wind_speed,
-        'rain': rain
-    })
-
-    if target_hour is not None:
-        # target_hour should be a string like '14:00'
-        df = df[df['time'].str.endswith(f"T{target_hour}")]
-        df = df.reset_index(drop=True)
-    return df
+    for t, temp, ws, r in zip(time, temperature, wind_speed, rain):
+        if target_hour is None or t.endswith(f"T{target_hour}"):
+            return {
+                'time': t,
+                'temperature': temp,
+                'wind_speed': ws,
+                'rain': r
+            }
+    return None
 
 def main():
     # Example usage
@@ -55,15 +52,6 @@ def main():
     weather_data = fetch_weather_data(date, location)
     processed_data = process_weather_data(weather_data, target_hour=target_hour)
     print(processed_data)
-
-    # # Add date and location columns
-    # processed_data['date'] = date
-    # processed_data['location'] = f"{location['lat']},{location['lon']}"
-
-    # # Save to CSV
-    # os.makedirs('data/processed', exist_ok=True)
-    # processed_data.to_csv('data/processed/weather_data.csv', index=False)
-    # print("Saved weather data to data/processed/weather_data.csv")
 
 if __name__ == "__main__":
     main()
