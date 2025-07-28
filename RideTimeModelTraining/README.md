@@ -9,7 +9,7 @@ RideTimeModelTraining
 ├── data
 │   ├── raw                # Contains raw historical ride data files (.gpx/.fit)
 │   └── processed
-│       └── features.csv   # Processed feature matrix ready for model training
+│       └── ride_data.csv  # Processed rides -parsed and sanitized- with weather aggregated
 ├── models
 │   └── model.pkl          # Serialized XGBoost model after training
 ├── src
@@ -17,14 +17,10 @@ RideTimeModelTraining
 │   │   └── parse_gpx.py   # Code to parse GPX files and extract ride metadata
 │   ├── weather
 │   │   └── fetch_weather.py # Fetches historical weather data for rides
-│   ├── features
-│   │   └── build_features.py # Transforms raw ride and weather data into features
 │   └── training
 │       └── train.py        # Handles training of the regression model
 ├── tracking
 │   └── mlflow              # Directory for tracking parameters, metrics, and artifacts
-├── spec
-│   └── training.yaml        # Project specifications including purpose, goals, and requirements
 ├── requirements.txt         # Lists required Python packages and their versions
 └── README.md                # Documentation for the project
 ```
@@ -43,11 +39,11 @@ RideTimeModelTraining
 
 3. Prepare your raw ride data files in the `data/raw` directory.
 
-4. Run the ingestion and processing scripts to prepare the feature matrix:
+
+4. Run the ingestion script to prepare the ride data:
    ```
-   python src/ingestion/parse_gpx.py
-   python src/weather/fetch_weather.py
-   python src/features/build_features.py
+   cd RideTimeModelTraining
+   source venv/bin/activate && python -m src.ingestion.parse_gpx
    ```
 
 5. Train the model:
