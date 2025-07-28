@@ -1,6 +1,6 @@
 import gpxpy
 import os
-from src.weather import fetch_weather
+from src.weather.fetch_weather import fetch_weather
 
 def parse_gpx(file_path):
     """
@@ -55,7 +55,7 @@ if __name__ == "__main__":
 
     for gpx_file in gpx_files:
         metadata = parse_gpx(os.path.join('data/raw', gpx_file))
-        metadata['ride_id'] = gpx_file  # Use filename as ride_id
+        # metadata['ride_id'] = gpx_file  # Use filename as ride_id
         metadata['date'] = metadata['timestamps'][0].date() if metadata['timestamps'] else None
         metadata['start_hour'] = metadata['timestamps'][0].hour if metadata['timestamps'] else None
         metadata['weekday'] = metadata['timestamps'][0].weekday() if metadata['timestamps'] else None
@@ -67,14 +67,18 @@ if __name__ == "__main__":
             lat, lon = map(float, ride['start_location'].split(','))
             location = {'lat': lat, 'lon': lon}
             date = ride['date'].isoformat() if ride['date'] else None
-            hour = ride['start_hour']
+            hour = f"{ride['start_hour']:02d}:00" if ride['start_hour'] is not None else None
             if date and hour is not None:
                 weather_data = fetch_weather(date, hour, location)
-                ride.update({
-                    'temperature': weather_data.get('temperature'),
-                    'wind_speed': weather_data.get('wind_speed'),
-                    'rain': weather_data.get('rain')
-                })
+                if weather_data is not None:
+                    ride.update({
+                        'temperature': weather_data.get('temperature'),
+                        'wind_speed': weather_data.get('wind_speed'),
+                        'rain': weather_data.get('rain')
+                    })
+                else:
+                    print(f"⚠️ Warning: No weather data for ride on {date} at hour {hour} at location {location}")
+                    ride.update({'temperature': None, 'wind_speed': None, 'rain': None})
             else:
                 ride.update({'temperature': None, 'wind_speed': None, 'rain': None})
         else:
