@@ -62,6 +62,7 @@ if __name__ == "__main__":
         ride_data.append(metadata)
 
     # Fetch weather data for each ride and append it to the ride data
+    ride_data.sort(key=lambda x: x['date'] if x['date'] is not None else '')
     for ride in ride_data:
         if ride['start_location']:
             lat, lon = map(float, ride['start_location'].split(','))
