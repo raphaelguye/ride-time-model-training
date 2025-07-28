@@ -26,36 +26,19 @@ ride-time-model-training
 ```
 
 ## Setup Instructions
-1. Clone the repository:
-   ```
-   git clone <repository-url>
-   cd RideTimeModelTraining
-   ```
 
-2. Install the required packages in venv:
+1. Install the required packages in venv:
    ```
    python3 -m venv venv && source venv/bin/activate
    python -m pip install -r requirements.txt
    ```
 
-3. Prepare your raw ride data files in the `data/raw` directory.
+2. Prepare your raw ride data files in the `data/raw` directory.
 
 
-4. Run the ingestion script to prepare the ride data:
+3. Run the ingestion script to prepare the ride data:
    ```
    source venv/bin/activate && python -m src.ingestion.parse_gpx
    ```
 
-5. Train the model:
-   ```
-   python src/training/train.py
-   ```
-
-## Usage
-After training, the model will be saved as `models/model.pkl`, and training metrics will be logged in the `tracking/mlflow` directory. You can use the trained model for predictions on new ride data.
-
-## Contributing
-Contributions are welcome! Please open an issue or submit a pull request for any improvements or features you would like to add.
-
-## License
-This project is licensed under the MIT License. See the LICENSE file for details.
+Next step: Train the model
