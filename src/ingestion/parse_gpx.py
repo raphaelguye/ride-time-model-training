@@ -32,11 +32,18 @@ def parse_gpx(file_path):
                     total_elevation_gain += elevation_diff
             timestamps.extend([point.time for point in points if point.time])
 
+    # Calculate duration in minutes if timestamps are available
+    duration_minutes = None
+    if timestamps and len(timestamps) > 1:
+        duration = (timestamps[-1] - timestamps[0]).total_seconds() / 60.0
+        duration_minutes = round(duration)
+
     return {
         'distance_km': total_distance / 1000,  # convert to kilometers
         'elevation_gain': total_elevation_gain,  # in meters
         'timestamps': timestamps,
-        'start_location': start_location
+        'start_location': start_location,
+        'duration_minutes': duration_minutes
     }
 
 if __name__ == "__main__":
@@ -59,6 +66,7 @@ if __name__ == "__main__":
         metadata['date'] = metadata['timestamps'][0].date() if metadata['timestamps'] else None
         metadata['start_hour'] = metadata['timestamps'][0].hour if metadata['timestamps'] else None
         metadata['weekday'] = metadata['timestamps'][0].weekday() if metadata['timestamps'] else None
+        # duration_minutes is now included in metadata
         ride_data.append(metadata)
 
     # Fetch weather data for each ride and append it to the ride data
