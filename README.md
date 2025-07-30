@@ -6,23 +6,26 @@ The Ride Time Model Training project aims to develop a machine learning model th
 ## Project Structure
 ```
 ride-time-model-training
+├── api
+│   └── openapi.yaml
 ├── data
-│   ├── raw                # Contains raw historical ride data files (.gpx/.fit)
+│   ├── raw                   # Contains raw historical ride data files (.gpx/.fit)
+│   │   └── ...
 │   └── processed
-│       └── ride_data.csv  # Processed rides -parsed and sanitized- with weather aggregated
-├── models
-│   └── model.pkl          # Serialized XGBoost model after training
+│       └── ride_data.csv     # Processed rides -parsed and sanitized- with weather aggregated
+├── mlruns                    # MLflow saved model for experiment tracking and reproducibility (including history and metrics)"
+│   └── ...
 ├── src
+│   ├── api
+│   │   └── serve.py          # FastAPI server for model prediction
 │   ├── ingestion
-│   │   └── parse_gpx.py   # Code to parse GPX files and extract ride metadata
+│   │   └── parse_gpx.py      # Parse GPX files and extract ride aggregated with the weather fetched
 │   ├── weather
-│   │   └── fetch_weather.py # Fetches historical weather data for rides
+│   │   └── fetch_weather.py  # Fetches historical weather data per date
 │   └── training
-│       └── train.py        # Handles training of the regression model
-├── tracking
-│   └── mlflow              # Directory for tracking parameters, metrics, and artifacts
-├── requirements.txt         # Lists required Python packages and their versions
-└── README.md                # Documentation for the project
+│       └── train.py          # Trains regression model on processed ride and weather data
+├── requirements.txt
+└── README.md
 ```
 
 ## Setup Instructions
