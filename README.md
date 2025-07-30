@@ -52,7 +52,14 @@ ride-time-model-training
    source venv/bin/activate && python -m mlflow ui
    ```
 
-5. Run the prediction API server:
+5. Configure the model to use for prediction:
+   
+   Create a `.env` file at the project root and fill it witht the model id generated in the previous step in `mlruns/0/models`:
+   ```
+   MODEL_ID=m-561e797988974a489....
+   ```
+
+6. Run the prediction API server:
    ```
    source venv/bin/activate && uvicorn src.api.serve:app --reload
    ```
