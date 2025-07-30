@@ -4,3 +4,5 @@ xgboost
 mlflow
 gpxpy
 requests
+fastapi
+uvicorn

@@ -1,0 +1,55 @@
+openapi: 3.0.0
+info:
+  title: Ride Duration Prediction API
+  version: 1.0.0
+paths:
+  /predict:
+    post:
+      summary: Predict ride duration
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                distance_km:
+                  type: number
+                  example: 42.0
+                elevation_gain:
+                  type: number
+                  example: 500
+                start_hour:
+                  type: integer
+                  example: 8
+                weekday:
+                  type: integer
+                  example: 2
+                temperature:
+                  type: number
+                  example: 15.5
+                wind_speed:
+                  type: number
+                  example: 5.0
+                rain:
+                  type: boolean
+                  example: false
+              required:
+                - distance_km
+                - elevation_gain
+                - start_hour
+                - weekday
+                - temperature
+                - wind_speed
+                - rain
+      responses:
+        '200':
+          description: Predicted ride duration in minutes
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  duration_minutes:
+                    type: number
+                    example: 120
