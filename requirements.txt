@@ -6,3 +6,4 @@ gpxpy
 requests
 fastapi
 uvicorn
+python-dotenv

@@ -1,7 +1,11 @@
+
 import os
 import mlflow.pyfunc
 from fastapi import FastAPI
 from pydantic import BaseModel
+from dotenv import load_dotenv
+
+load_dotenv()
 
 class RideFeatures(BaseModel):
     distance_km: float
@@ -19,12 +23,14 @@ app = FastAPI(title="Ride Duration Prediction API")
 def health():
     return {"status": "ok"}
 
-# Load model from a hardcoded path
+# Load model from a path using MODEL_ID from .env
+MODEL_ID = os.getenv("MODEL_ID")
+if not MODEL_ID:
+    raise RuntimeError("MODEL_ID not set in .env file")
 model_path = os.path.join(
     os.path.dirname(os.path.dirname(os.path.dirname(__file__))),
-    "mlruns", "0", "models", "m-561e797988974a489fbfcd14d794d15f", "artifacts"
+    "mlruns", "0", "models", MODEL_ID, "artifacts"
 )
-# load the model from model_path
 model = mlflow.pyfunc.load_model(model_path)
 
 @app.post("/predict")
