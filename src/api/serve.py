@@ -40,4 +40,4 @@ def predict(features: RideFeatures):
     import pandas as pd
     df = pd.DataFrame([input_df])
     prediction = model.predict(df)
-    return {"duration_minutes": float(prediction[0])}
+    return {"duration_minutes": int(prediction[0])}
