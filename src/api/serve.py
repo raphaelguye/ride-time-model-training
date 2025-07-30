@@ -7,7 +7,6 @@ class RideFeatures(BaseModel):
     distance_km: float
     elevation_gain: float
     start_hour: int
-    end_hour: int
     weekday: int
     temperature: float
     wind_speed: float
@@ -23,7 +22,7 @@ def health():
 # Load model from a hardcoded path
 model_path = os.path.join(
     os.path.dirname(os.path.dirname(os.path.dirname(__file__))),
-    "mlruns", "0", "models", "m-9d791e1c965f4306ae867c99415328ac", "artifacts"
+    "mlruns", "0", "models", "m-561e797988974a489fbfcd14d794d15f", "artifacts"
 )
 # load the model from model_path
 model = mlflow.pyfunc.load_model(model_path)
