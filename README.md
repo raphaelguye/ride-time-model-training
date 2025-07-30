@@ -51,3 +51,24 @@ ride-time-model-training
    ```
    source venv/bin/activate && python -m mlflow ui
    ```
+
+5. Run the prediction API server:
+   ```
+   source venv/bin/activate && uvicorn src.api.serve:app --reload
+   ```
+   The API will be available at http://localhost:8000
+
+   Example: Get a prediction with curl
+   ```sh
+   curl -X POST "http://localhost:8000/predict" \
+     -H "Content-Type: application/json" \
+     -d '{
+       "distance_km": 40.0,
+       "elevation_gain": 500,
+       "start_hour": 8,
+       "weekday": 2,
+       "temperature": 15.5,
+       "wind_speed": 5.0,
+       "rain": false
+     }'
+   ```
