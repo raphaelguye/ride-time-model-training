@@ -1,7 +1,10 @@
 # Ride Time Model Training
 
 ## Overview
-The Ride Time Model Training project aims to develop a machine learning model that predicts the duration of cycling routes based on historical ride data and enriched weather features. The model will be trained using past ride data in GPX or FIT format, along with corresponding weather data.
+The Ride Time Model Training project aims to predict cycling route durations using machine learning.
+
+The training is made on historical personal ride data provided in GPX format.
+Each rides are aggregated with corresponding weather data. The model estimates how long a ride will take based on route characteristics and weather conditions.
 
 ## Project Structure
 ```
@@ -9,11 +12,11 @@ ride-time-model-training
 ├── api
 │   └── openapi.yaml
 ├── data
-│   ├── raw                   # Contains raw historical ride data files (.gpx/.fit)
+│   ├── raw                   # Contains raw historical ride data files (.gpx)
 │   │   └── ...
 │   └── processed
 │       └── ride_data.csv     # Processed rides -parsed and sanitized- with weather aggregated
-├── mlruns                    # MLflow saved model for experiment tracking and reproducibility (including history and metrics)"
+├── mlruns                    # MLflow saved models for experiment tracking and reproducibility (including history and metrics)"
 │   └── ...
 ├── src
 │   ├── api
