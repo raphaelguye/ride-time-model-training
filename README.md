@@ -41,4 +41,13 @@ ride-time-model-training
    source venv/bin/activate && python -m src.ingestion.parse_gpx
    ```
 
-Next step: Train the model
+4. Train the model using the processed `ride_data.csv` from the previous step:
+   ```
+   source venv/bin/activate && python -m src.training.train
+   ```
+   The trained model and experiment artifacts will be saved in the `mlruns` directory on the root of the project.
+
+   To view experiment runs and model artifacts in your browser, launch the MLflow UI:
+   ```
+   source venv/bin/activate && python -m mlflow ui
+   ```

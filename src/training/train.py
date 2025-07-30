@@ -10,7 +10,9 @@ def train_model(data_path):
     data = pd.read_csv(data_path)
 
     print("Preparing features and target variable...")
-    X = data.drop(columns=['duration_minutes'])
+    # Drop non-numeric columns if present
+    non_numeric_cols = ['duration_minutes', 'start_location', 'date']
+    X = data.drop(columns=[col for col in non_numeric_cols if col in data.columns])
     y = data['duration_minutes']
 
     print("Splitting data into training and testing sets...")
