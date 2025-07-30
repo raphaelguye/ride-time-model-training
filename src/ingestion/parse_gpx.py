@@ -65,6 +65,7 @@ if __name__ == "__main__":
         # metadata['ride_id'] = gpx_file  # Use filename as ride_id
         metadata['date'] = metadata['timestamps'][0].date() if metadata['timestamps'] else None
         metadata['start_hour'] = metadata['timestamps'][0].hour if metadata['timestamps'] else None
+        metadata['end_hour'] = metadata['timestamps'][-1].hour if metadata['timestamps'] else None
         metadata['weekday'] = metadata['timestamps'][0].weekday() if metadata['timestamps'] else None
         # duration_minutes is now included in metadata
         ride_data.append(metadata)
@@ -76,9 +77,10 @@ if __name__ == "__main__":
             lat, lon = map(float, ride['start_location'].split(','))
             location = {'lat': lat, 'lon': lon}
             date = ride['date'].isoformat() if ride['date'] else None
-            hour = f"{ride['start_hour']:02d}:00" if ride['start_hour'] is not None else None
-            if date and hour is not None:
-                weather_data = fetch_weather(date, hour, location)
+            start_hour = ride['start_hour'] if ride['start_hour'] else None
+            end_hour = ride['end_hour'] if ride['end_hour'] else None
+            if date and start_hour is not None and end_hour is not None:
+                weather_data = fetch_weather(date, start_hour, end_hour, location)
                 if weather_data is not None:
                     ride.update({
                         'temperature': weather_data.get('temperature'),
@@ -86,11 +88,13 @@ if __name__ == "__main__":
                         'rain': weather_data.get('rain')
                     })
                 else:
-                    print(f"⚠️ Warning: No weather data for ride on {date} at hour {hour} at location {location}")
+                    print(f"⚠️ Warning: No weather data for ride on {date} at hour {start_hour} at location {location}")
                     ride.update({'temperature': None, 'wind_speed': None, 'rain': None})
             else:
+                print(f"⚠️ Warning: Incomplete date or hour for ride on {date} at location {location}")
                 ride.update({'temperature': None, 'wind_speed': None, 'rain': None})
         else:
+            print(f"⚠️ Warning: No weather data for ride on {date} at hour {start_hour} at location {location}")
             ride.update({'temperature': None, 'wind_speed': None, 'rain': None})
 
     # Convert to DataFrame and save to CSV

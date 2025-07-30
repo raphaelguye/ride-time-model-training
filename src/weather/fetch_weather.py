@@ -42,14 +42,41 @@ def _process_weather_data(weather_data, target_hour=None):
             }
     return None
 
-def fetch_weather(date, hour, location):
+def fetch_weather(date, start_hour, end_hour, location):
+    """
+    Fetch weather for a range of hours on a given date and location.
+    Returns a dict with temperature, wind_speed (from the first hour), and rain=True if any hour in the range had rain.
+    """
     weather_data = _fetch_weather_data(date, location)
-    return _process_weather_data(weather_data, target_hour=hour)
+    temperature = None
+    wind_speed = None
+    rain_any = False
+    hours = list(range(start_hour, end_hour + 1))
+    time = weather_data['hourly']['time']
+    temperature_2m = weather_data['hourly']['temperature_2m']
+    wind_speed_10m = weather_data['hourly']['wind_speed_10m']
+    precipitation = weather_data['hourly']['precipitation']
+    for idx, t in enumerate(time):
+        # t format: 'YYYY-MM-DDTHH:MM'
+        hour = int(t[11:13])
+        if hour in hours:
+            if temperature is None:
+                temperature = temperature_2m[idx]
+            if wind_speed is None:
+                wind_speed = wind_speed_10m[idx]
+            if precipitation[idx] > 0:
+                rain_any = True
+    return {
+        'temperature': temperature,
+        'wind_speed': wind_speed,
+        'rain': rain_any
+    }
 
 # Example usage for testing
 if __name__ == "__main__":
-    date = "2025-01-01"
-    hour = "12:00"
-    location = {'lat': 46.9910, 'lon': 6.9293}
-    result = fetch_weather(date, hour, location)
+    date = "2025-07-24"
+    start_hour = 18
+    end_hour = 20 # rain at 19:00
+    location = {'lat': 47.044278, 'lon': 7.098556}
+    result = fetch_weather(date, start_hour, end_hour, location)
     print(result)
